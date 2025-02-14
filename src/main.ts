@@ -81,7 +81,8 @@ const pacientes: Pacientes[] = [
 // Apartado 1
 // a) Queremos extraer la lista de paciente que están asignados a la especialidad de Pediatría
 
-const obtenPacientesAsignadosAPediatria = (pacientes: Pacientes[]): Pacientes[] => {
+/*
+  const obtenPacientesAsignadosAPediatria = (pacientes: Pacientes[]): Pacientes[] => {
   const resultado: Pacientes[] = []; 
 
   for (let i = 0; i < pacientes.length; i++) {
@@ -96,6 +97,7 @@ const obtenPacientesAsignadosAPediatria = (pacientes: Pacientes[]): Pacientes[] 
 
 const pacientesPediatria = obtenPacientesAsignadosAPediatria(pacientes);
 console.log(pacientesPediatria);
+
 
   
 // Apartado 1
@@ -214,3 +216,85 @@ const cuentaPacientesPorEspecialidad = (pacientes: Pacientes[]): NumeroPacientes
 
 const pacientesPorEspecialidad = cuentaPacientesPorEspecialidad(pacientes);
 console.log(pacientesPorEspecialidad);
+*/
+
+
+
+//------------------------------------------------------------------------------//
+//-----------------------------------------------------------------------------//
+// ARRAY METHODS
+// Apartado 1
+// a) Queremos extraer la lista de paciente que están asignados a la especialidad de Pediatría
+
+const obtenPacientesAsignadosAPediatria = (pacientes: Pacientes[]): Pacientes[] => {
+  return pacientes.filter(paciente => paciente.especialidad === "Pediatra");
+};
+
+console.log(obtenPacientesAsignadosAPediatria(pacientes));
+
+// b) Queremos extraer la lista de pacientes asignados a Pediatría y que tengan una edad menor de 10 años.
+const obtenPacientesAsignadosAPediatriaYMenorDeDiezAnios = (pacientes: Pacientes[]): Pacientes[] => {
+  return pacientes.filter(paciente => paciente.especialidad === "Pediatra" && paciente.edad < 10);
+};
+
+console.log(obtenPacientesAsignadosAPediatriaYMenorDeDiezAnios(pacientes));
+
+// Apartado 2
+// Queremos activar el protocolo de urgencia si cualquier de los pacientes tiene un ritmo cardíaco superior a 100 pulsaciones por minuto y una temperatura corporal superior a 39 grados.
+const activarProtocoloUrgencia = (pacientes: Pacientes[]): boolean => {
+  let activarProctolo = pacientes.some(
+    paciente => paciente.frecuenciaCardiaca > 100 && paciente.temperatura > 39
+  );
+
+  return activarProctolo;
+};
+
+console.log(activarProtocoloUrgencia(pacientes));
+
+// Apartado 3
+// El pediatra no puede atender hoy a los pacientes, queremos reasignar los pacientes asignados a la especialidad de pediatría a la de medico de familia.
+const reasignaPacientesAMedicoFamilia = (pacientes: Pacientes[]): Pacientes[] => {
+  return pacientes.map(paciente => {
+    if (paciente.especialidad === "Pediatra") {
+      return { ...paciente, especialidad: "Medico de familia" };
+    } else {
+      return paciente;
+    }
+  });
+};
+
+console.log(reasignaPacientesAMedicoFamilia(pacientes));
+
+// Apartado 4
+// Queremos saber si podemos mandar al Pediatra a casa (si no tiene pacientes asignados), comprobar si en la lista hay algún paciente asignado a pediatría
+const HayPacientesDePediatria = (pacientes: Pacientes[]): boolean => {
+  return pacientes.some(paciente => paciente.especialidad === "Pediatra");
+};
+
+console.log(HayPacientesDePediatria(pacientes)); 
+
+// Apartado 5
+// Queremos calcular el número total de pacientes que están asignados a la especialidad de Medico de familia, y lo que están asignados a Pediatría y a cardiología
+interface NumeroPacientesPorEspecialidad {
+  medicoDeFamilia: number;
+  pediatria: number;
+  cardiologia: number;
+}
+
+const cuentaPacientesPorEspecialidad = (pacientes: Pacientes[]): NumeroPacientesPorEspecialidad => {
+  return pacientes.reduce(
+    (contador, paciente) => {
+      if (paciente.especialidad === "Medico de familia") {
+        contador.medicoDeFamilia++;
+      } else if (paciente.especialidad === "Pediatra") {
+        contador.pediatria++;
+      } else if (paciente.especialidad === "Cardiólogo") {
+        contador.cardiologia++;
+      }
+      return contador;
+    },
+    { medicoDeFamilia: 0, pediatria: 0, cardiologia: 0 }
+  );
+};
+
+console.log(cuentaPacientesPorEspecialidad(pacientes));
